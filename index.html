@@ -96,10 +96,21 @@
 		console.timeEnd('roll');
 	}
 
-	document.onkeypress = function (e){
+	document.addEventListener('keypress', function(event) {
 		// Enter == 13
-		if (e.keyCode == 13 && e.target != document.getElementById('char-number')) roll();
-	};
+		if (event.keyCode == 13 && event.target != document.getElementById('char-number')) roll();
+	});
+
+	//offline support
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('offline.js')
+		.then(function() {
+			console.log('Service worker registered');
+		})
+		.catch(function() {
+			console.log('There was a problem registering the service worker');
+		});
+	}
 	</script>
 	</body>
 </html>
