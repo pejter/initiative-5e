@@ -40,13 +40,12 @@
 	function updateList() {
 		console.time('updateList');
 		var numberOfChars = document.getElementById('char-number').value;
-		while (charFrame.children.length != numberOfChars){
-			if (charFrame.children.length < numberOfChars){
+			while (charFrame.children.length < numberOfChars) {
 				charFrame.appendChild(charFrame.children[0].cloneNode(true));
-			} else {
+			}
+			while (charFrame.children.length > numberOfChars && numberOfChars > 1) {
 				charFrame.removeChild(charFrame.lastChild);
 			}
-		}
 		console.timeEnd('updateList');
 	}
 
