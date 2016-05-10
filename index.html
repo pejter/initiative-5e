@@ -103,12 +103,12 @@
 
 	//offline support
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('offline.js')
+		navigator.serviceWorker.register('/offline.js')
 		.then(function() {
 			console.log('Service worker registered');
 		})
-		.catch(function() {
-			console.log('There was a problem registering the service worker');
+		.catch(function(reason) {
+			console.log('Service worker not registered: '+reason);
 		});
 	}
 	</script>
