@@ -98,7 +98,8 @@
 	}
 
 	document.onkeypress = function (e){
-		if (e.key == "Enter" && e.target != document.getElementById('char-number')) roll();
+		// Enter == 13
+		if (e.keyCode == 13 && e.target != document.getElementById('char-number')) roll();
 	};
 	</script>
 	</body>
