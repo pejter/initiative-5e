@@ -103,7 +103,7 @@
 
 	//offline support
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/offline.js')
+		navigator.serviceWorker.register('./offline.js')
 		.then(function() {
 			console.log('Service worker registered');
 		})
