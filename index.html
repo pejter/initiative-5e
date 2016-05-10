@@ -52,11 +52,14 @@
 		var initList = [];
 		for (var i = charFrame.children.length - 1; i >= 0; i--) {
 			var charName = charFrame.children[i].getElementsByClassName('name')[0].value;
-			var initScore = parseInt(charFrame.children[i].getElementsByClassName('init-score')[0].value);
-			var initMod	= parseInt(charFrame.children[i].getElementsByClassName('init-mod')[0].value);
+			var initScore = Number(charFrame.children[i].getElementsByClassName('init-score')[0].value);
+			var initMod	= Number(charFrame.children[i].getElementsByClassName('init-mod')[0].value);
 			var roll = rand(1, 20);
+
 			var newElement = {
 				'name': charName,
+				'initScore': initScore,
+				'initMod': initMod,
 				'roll': roll,
 				'init': roll + initScore + initMod
 			};
@@ -65,13 +68,18 @@
 		}
 
 		initList.sort(function (a,b){
-			return a['init']-b['init'];
+			if (a.init != b.init) return a.init - b.init;
+			if (a.initScore != b.initScore) return a.initScore - b.initScore;
+			if (a.initMod != b.initMod) return a.initMod - b.initMod;
+			var first = Math.random() - 0.5;
+			while (first == 0);
+			return first;
 		});
 		console.log(initList);
 
 		listFrame.innerHTML = "";
 		for (var i = initList.length - 1; i >= 0; i--) {
-			var newElement = '<li class="list-group-item col-md-12"><span class="col-sm-11">'+initList[i].name+'</span>'+initList[i].init+'</li>';
+			var newElement = '<li class="list-group-item"><span class="col-sm-11">'+initList[i].name+'</span>'+initList[i].init+'</li>';
 			listFrame.insertAdjacentHTML('beforeend', newElement);
 		}
 	}
