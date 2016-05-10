@@ -34,6 +34,7 @@
 	var listFrame = document.getElementById('init-order');
 
 	function updateList() {
+		console.time('updateList');
 		var numberOfChars = document.getElementById('char-number').value;
 		while (charFrame.children.length != numberOfChars){
 			if (charFrame.children.length < numberOfChars){
@@ -42,6 +43,7 @@
 				charFrame.removeChild(charFrame.lastChild);
 			}
 		}
+		console.timeEnd('updateList');
 	}
 
 	function rand(min, max) {
@@ -49,7 +51,9 @@
 	}
 
 	function roll() {
+		console.time('roll');
 		var initList = [];
+		console.time('generateInitList');
 		for (var i = charFrame.children.length - 1; i >= 0; i--) {
 			var charName = charFrame.children[i].getElementsByClassName('name')[0].value;
 			var initScore = Number(charFrame.children[i].getElementsByClassName('init-score')[0].value);
@@ -63,10 +67,12 @@
 				'roll': roll,
 				'init': roll + initScore + initMod
 			};
-			console.log(newElement);
+			//console.log(newElement);
 			initList.push(newElement);
 		}
+		console.timeEnd('generateInitList');
 
+		console.time('sort');
 		initList.sort(function (a,b){
 			if (a.init != b.init) return a.init - b.init;
 			if (a.initScore != b.initScore) return a.initScore - b.initScore;
@@ -75,13 +81,16 @@
 			while (first == 0);
 			return first;
 		});
-		console.log(initList);
+		console.timeEnd('sort');
 
+		console.time('updateDOM');
 		listFrame.innerHTML = "";
 		for (var i = initList.length - 1; i >= 0; i--) {
 			var newElement = '<li class="list-group-item"><span class="col-sm-11">'+initList[i].name+'</span>'+initList[i].init+'</li>';
 			listFrame.insertAdjacentHTML('beforeend', newElement);
 		}
+		console.timeEnd('updateDOM');
+		console.timeEnd('roll');
 	}
 
 	document.onkeypress = function (e){
