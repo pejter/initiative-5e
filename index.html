@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Initiative - 5e</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<style>
+			.form-group {
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+	<div class="container-fluid" style="padding: 0;">
+		<div class="col-xs-12 bg-primary">
+			<h4>Number of characters in the encounter: <input id="char-number" type="number" min="2" value="1" onchange="updateList();" autofocus><button style="margin-top: -7px;" class="btn btn-default pull-right" onclick="roll();">Roll initiative!</button></h4>
+		</div>
+		<div class="clearfix"></div>
+		<ul id="characters" class="list-group col-md-6">
+			<li class="list-group-item col-md-12">
+				<div class="form-group col-md-6"><input type="text" class="form-control name" placeholder="Character name"></div>
+				<div class="form-group col-md-3"><input type="number" class="form-control init-score" placeholder="I. score"></div>
+				<div class="form-group col-md-3"><input type="number" class="form-control init-mod" placeholder="I. modifier"></div>
+			</li>
+		</ul>
+
+		<ul id="init-order" class="list-group col-md-6">
+		</ul>
+		</div>
+	</div>
+	<script>
+	var charFrame = document.getElementById('characters');
+	var listFrame = document.getElementById('init-order');
+
+	function updateList() {
+		var numberOfChars = document.getElementById('char-number').value;
+		while (charFrame.children.length != numberOfChars){
+			if (charFrame.children.length < numberOfChars){
+				charFrame.appendChild(charFrame.children[0].cloneNode(true));
+			} else {
+				charFrame.removeChild(charFrame.lastChild);
+			}
+		}
+	}
+
+	function rand(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	function roll() {
+		var initList = [];
+		for (var i = charFrame.children.length - 1; i >= 0; i--) {
+			var charName = charFrame.children[i].getElementsByClassName('name')[0].value;
+			var initScore = parseInt(charFrame.children[i].getElementsByClassName('init-score')[0].value);
+			var initMod	= parseInt(charFrame.children[i].getElementsByClassName('init-mod')[0].value);
+			var roll = rand(1, 20);
+			var newElement = {
+				'name': charName,
+				'roll': roll,
+				'init': roll + initScore + initMod
+			};
+			console.log(newElement);
+			initList.push(newElement);
+		}
+
+		initList.sort(function (a,b){
+			return a['init']-b['init'];
+		});
+		console.log(initList);
+
+		listFrame.innerHTML = "";
+		for (var i = initList.length - 1; i >= 0; i--) {
+			var newElement = '<li class="list-group-item col-md-12"><span class="col-sm-11">'+initList[i].name+'</span>'+initList[i].init+'</li>';
+			listFrame.insertAdjacentHTML('beforeend', newElement);
+		}
+	}
+
+	document.onkeypress = function (e){
+		if (e.key == "Enter") roll();
+	};
+	</script>
+	</body>
+</html>
