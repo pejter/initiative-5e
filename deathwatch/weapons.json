@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Bolt Pistol",
+    "damage": "1d10+9",
+    "pen": 4,
+    "range": 30,
+    "clip": 14,
+    "single": true,
+    "semi": 2,
+    "full": false
+  },
+  {
+    "name": "Bolter",
+    "damage": "1d10+9",
+    "pen": 4,
+    "range": 100,
+    "clip": 28,
+    "single": true,
+    "semi": 3,
+    "full": false
+  },
+  {
+    "name": "Heavy Bolter",
+    "damage": "1d10+12",
+    "pen": 5,
+    "range": 150,
+    "clip": 60,
+    "single": false,
+    "semi": false,
+    "full": 6
+  },
+  {
+    "name": "Flamer",
+    "damage": "1d10+9",
+    "pen": 4,
+    "range": 20,
+    "clip": 6,
+    "single": true,
+    "semi": false,
+    "full": false
+  },
+  {
+    "name": "Hand Flamer",
+    "damage": "1d10+7",
+    "pen": 4,
+    "range": 10,
+    "clip": 4,
+    "single": true,
+    "semi": false,
+    "full": false
+  },
+  {
+    "name": "Heavy Flamer",
+    "damage": "1d10+12",
+    "pen": 6,
+    "range": 30,
+    "clip": 10,
+    "single": true,
+    "semi": false,
+    "full": false
+  },
+  {
+    "name": "Shotgun",
+    "damage": "1d10+9",
+    "pen": 4,
+    "range": 30,
+    "clip": 18,
+    "single": true,
+    "semi": 2,
+    "full": false
+  }
+]

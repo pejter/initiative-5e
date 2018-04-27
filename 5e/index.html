@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Initiative - 5e</title>
+		<style>
+			.form-group {
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+	<div class="container-fluid" style="padding: 0;">
+		<div class="col-xs-12 bg-primary form-inline">
+			<div class="form-group">
+				<label for="char-number">Number of characters in the encounter: </label>
+				<input class="form-control" id="char-number" type="number" min="2" value="1" onchange="updateList();" autofocus>
+			</div>
+				<button class="btn btn-default pull-right" onclick="roll();">Roll initiative!</button>
+		</div>
+		<div class="clearfix"></div>
+		<ul id="characters" class="list-group col-md-6">
+			<li class="list-group-item col-md-12">
+				<div class="form-group col-md-6"><input type="text" class="form-control name" placeholder="Character name"></div>
+				<div class="form-group col-md-3"><input type="number" class="form-control init-score" placeholder="I. score"></div>
+				<div class="form-group col-md-3"><input type="number" class="form-control init-mod" placeholder="I. modifier"></div>
+			</li>
+		</ul>
+
+		<ul id="init-order" class="list-group col-md-6">
+		</ul>
+		</div>
+	</div>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script>
+	var charFrame = document.getElementById('characters');
+	var listFrame = document.getElementById('init-order');
+
+	function updateList() {
+		console.time('updateList');
+		var numberOfChars = document.getElementById('char-number').value;
+			while (charFrame.children.length < numberOfChars) {
+				charFrame.appendChild(charFrame.children[0].cloneNode(true));
+			}
+			while (charFrame.children.length > numberOfChars && numberOfChars > 1) {
+				charFrame.removeChild(charFrame.lastChild);
+			}
+		console.timeEnd('updateList');
+	}
+
+	function rand(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	function roll() {
+		console.time('roll');
+		var initList = [];
+		console.time('generateInitList');
+		for (var i = charFrame.children.length - 1; i >= 0; i--) {
+			var charName = charFrame.children[i].getElementsByClassName('name')[0].value;
+			var initScore = Number(charFrame.children[i].getElementsByClassName('init-score')[0].value);
+			var initMod	= Number(charFrame.children[i].getElementsByClassName('init-mod')[0].value);
+			var roll = rand(1, 20);
+
+			var newElement = {
+				'name': charName,
+				'initScore': initScore,
+				'initMod': initMod,
+				'roll': roll,
+				'init': roll + initScore + initMod
+			};
+			//console.log(newElement);
+			initList.push(newElement);
+		}
+		console.timeEnd('generateInitList');
+
+		console.time('sort');
+		initList.sort(function (a,b){
+			if (a.init != b.init) return a.init - b.init;
+			if (a.initScore != b.initScore) return a.initScore - b.initScore;
+			if (a.initMod != b.initMod) return a.initMod - b.initMod;
+			var first = Math.random() - 0.5;
+			while (first == 0);
+			return first;
+		});
+		console.timeEnd('sort');
+
+		console.time('updateDOM');
+		listFrame.innerHTML = "";
+		for (var i = initList.length - 1; i >= 0; i--) {
+			var newElement = '<li class="list-group-item"><span class="col-sm-11">'+initList[i].name+'</span>'+initList[i].init+'</li>';
+			listFrame.insertAdjacentHTML('beforeend', newElement);
+		}
+		console.timeEnd('updateDOM');
+		console.timeEnd('roll');
+	}
+
+	document.addEventListener('keypress', function(event) {
+		// Enter == 13
+		if (event.keyCode == 13 && event.target != document.getElementById('char-number')) roll();
+	});
+
+	//offline support
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('./offline.js')
+		.then(function() {
+			console.log('Service worker registered');
+		})
+		.catch(function(reason) {
+			console.log('Service worker not registered: '+reason);
+		});
+	}
+	</script>
+	</body>
+</html>
